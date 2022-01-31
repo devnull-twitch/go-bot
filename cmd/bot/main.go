@@ -19,6 +19,9 @@ func main() {
 
 	bot.AddCommand(commands.RandChatter())
 	bot.AddCommand(commands.WaitResponse())
+	for _, c := range commands.TextResponses() {
+		bot.AddCommand(c)
+	}
 
 	if err := bot.Run(); err != nil {
 		log.Fatal(err)
