@@ -8,7 +8,8 @@ import (
 
 func WaitResponse() tmi.Command {
 	return tmi.Command{
-		Name: "late",
+		Name:        "late",
+		Description: "Demo for a delayed reply message",
 		Handler: func(client *tmi.Client, args tmi.CommandArgs) *tmi.OutgoingMessage {
 			go func() {
 				time.Sleep(5 * time.Second)

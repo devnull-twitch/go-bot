@@ -10,6 +10,7 @@ import (
 func RandChatter() tmi.Command {
 	return tmi.Command{
 		Name:                     "rnd_chatter",
+		Description:              "Picks a random chatter",
 		RequiresBroadcasterOrMod: true,
 		Handler: func(client *tmi.Client, args tmi.CommandArgs) *tmi.OutgoingMessage {
 			all := client.Chatters()

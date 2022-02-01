@@ -15,14 +15,16 @@ type (
 		Validate func(string) bool
 	}
 	CommandArgs struct {
-		Parameters map[string]string
-		RestParams []string
-		Channel    string
-		ParentID   string
+		Parameters             map[string]string
+		RestParams             []string
+		Channel                string
+		ParentID               string
+		UserIsBroadcasterOrMod bool
 	}
 	CommandHandler func(client *Client, args CommandArgs) *OutgoingMessage
 	Command        struct {
 		Name                     string
+		Description              string
 		Params                   []Parameter
 		Handler                  CommandHandler
 		RequiresBroadcasterOrMod bool
@@ -33,6 +35,15 @@ type (
 func (c *Client) AddCommand(cmd Command) *Client {
 	c.commands[cmd.Name] = cmd
 	return c
+}
+
+func (c *Client) ListCommands() []Command {
+	cmds := make([]Command, 0, len(c.commands))
+	for _, c := range c.commands {
+		cmds = append(cmds, c)
+	}
+
+	return cmds
 }
 
 func (c *Client) handleCommand(m *IncomingCommand) {
@@ -80,10 +91,11 @@ func (c *Client) handleCommand(m *IncomingCommand) {
 	}
 
 	out := cmd.Handler(c, CommandArgs{
-		Parameters: pmap,
-		RestParams: restParams,
-		Channel:    m.Channel,
-		ParentID:   m.MsgID,
+		Parameters:             pmap,
+		RestParams:             restParams,
+		Channel:                m.Channel,
+		ParentID:               m.MsgID,
+		UserIsBroadcasterOrMod: m.Broadcaster || m.Mod,
 	})
 	if out != nil {
 		out.Channel = m.Channel

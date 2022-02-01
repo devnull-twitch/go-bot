@@ -29,7 +29,8 @@ func TextResponses() []tmi.Command {
 	for i, c := range config.Responses {
 		respCopy := c.Response
 		cmds[i] = tmi.Command{
-			Name: c.Command,
+			Name:        c.Command,
+			Description: "Returns a link",
 			Handler: func(client *tmi.Client, args tmi.CommandArgs) *tmi.OutgoingMessage {
 				return &tmi.OutgoingMessage{
 					Message: respCopy,
