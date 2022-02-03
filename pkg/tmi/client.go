@@ -13,16 +13,13 @@ type Client struct {
 	ircClient *irc.Client
 	userList  map[string]int64
 	commands  map[string]Command
+	modules   []Module
 }
 
 type IncomingCommand struct {
-	Broadcaster bool
-	Mod         bool
-	User        string
-	Channel     string
-	Command     string
-	Params      []string
-	MsgID       string
+	IncomingMessage
+	Command string
+	Params  []string
 }
 
 type OutgoingMessage struct {
@@ -30,6 +27,14 @@ type OutgoingMessage struct {
 	Channel     string
 	ParentID    string
 	SendAsReply bool
+}
+
+type IncomingMessage struct {
+	Message     string
+	Channel     string
+	MsgID       string
+	Broadcaster bool
+	Mod         bool
 }
 
 func New(username, token, channel, commandMarkerChar string) (*Client, error) {
@@ -71,33 +76,43 @@ func New(username, token, channel, commandMarkerChar string) (*Client, error) {
 			}
 
 			if m.Command == "PRIVMSG" {
-				if m.Param(1)[0:1] != commandMarkerChar {
-					return
-				}
-
-				incoming := &IncomingCommand{
+				msg := IncomingMessage{
 					Channel: m.Param(0),
+					Message: m.Param(1),
 				}
-
-				params := strings.Split(m.Param(1)[1:], " ")
-				incoming.Command = params[0]
-				incoming.Params = params[1:]
-
 				if len(m.Tags) > 0 {
 					for tagName, tagValue := range m.Tags {
 						if tagName == "badges" && strings.Contains(string(tagValue), "broadcaster/1") {
-							incoming.Broadcaster = true
+							msg.Broadcaster = true
 						}
 						if tagName == "mod" && tagValue == "1" {
-							incoming.Mod = true
+							msg.Mod = true
 						}
 						if tagName == "id" {
-							incoming.MsgID = string(tagValue)
+							msg.MsgID = string(tagValue)
 						}
 					}
 				}
 
-				tmiClient.handleCommand(incoming)
+				if m.Param(1)[0:1] == commandMarkerChar {
+					incoming := &IncomingCommand{IncomingMessage: msg}
+
+					params := strings.Split(m.Param(1)[1:], " ")
+					incoming.Command = params[0]
+					incoming.Params = params[1:]
+
+					tmiClient.handleCommand(incoming)
+				}
+
+				for _, module := range tmiClient.modules {
+					args := module.MessageTrigger(tmiClient, &msg)
+					if args != nil {
+						out := module.Handler(tmiClient, *args)
+						if out != nil {
+							tmiClient.Send(out)
+						}
+					}
+				}
 			}
 		}),
 	}

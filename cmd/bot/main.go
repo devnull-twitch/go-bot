@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/devnull-twitch/go-tmi/internal/commands"
+	"github.com/devnull-twitch/go-tmi/internal/modules"
 	"github.com/devnull-twitch/go-tmi/pkg/tmi"
 	"github.com/google/go-github/v42/github"
 	"github.com/joho/godotenv"
@@ -32,13 +33,14 @@ func main() {
 	ghClient := github.NewClient(httpClient)
 
 	bot.AddCommand(commands.RandChatter())
-	bot.AddCommand(commands.WaitResponse())
 	bot.AddCommand(commands.GithubDataCommand(ghClient))
 	bot.AddCommand(commands.GithubMakeTagCommand(ghClient))
 	bot.AddCommand(commands.ListCommandsCommand())
 	for _, c := range commands.TextResponses() {
 		bot.AddCommand(c)
 	}
+
+	bot.AddModule(modules.TimedMessageMod([]string{"This", "is", "a", "test"}, os.Getenv("CHANNEL")))
 
 	if err := bot.Run(); err != nil {
 		log.Fatal(err)
