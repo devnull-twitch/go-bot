@@ -3,7 +3,7 @@ package commands
 import (
 	"fmt"
 
-	"github.com/devnull-twitch/go-bot/pkg/tmi"
+	"github.com/devnull-twitch/go-tmi"
 )
 
 func cmdLine(cmd tmi.Command) string {

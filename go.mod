@@ -5,6 +5,7 @@ go 1.17
 require github.com/joho/godotenv v1.4.0
 
 require (
+	github.com/devnull-twitch/go-tmi v0.0.0-20220203170959-e583c58641e2 // indirect
 	github.com/golang/protobuf v1.4.2 // indirect
 	github.com/google/go-github/v42 v42.0.0 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect

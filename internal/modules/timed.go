@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/devnull-twitch/go-bot/pkg/tmi"
+	"github.com/devnull-twitch/go-tmi"
 )
 
 type timedMessageMod struct {

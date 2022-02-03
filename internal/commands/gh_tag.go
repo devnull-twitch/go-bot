@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"regexp"
 
-	"github.com/devnull-twitch/go-bot/pkg/tmi"
+	"github.com/devnull-twitch/go-tmi"
 	"github.com/google/go-github/v42/github"
 	"github.com/sirupsen/logrus"
 )

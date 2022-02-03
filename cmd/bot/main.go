@@ -8,7 +8,7 @@ import (
 
 	"github.com/devnull-twitch/go-bot/internal/commands"
 	"github.com/devnull-twitch/go-bot/internal/modules"
-	"github.com/devnull-twitch/go-bot/pkg/tmi"
+	"github.com/devnull-twitch/go-tmi"
 	"github.com/google/go-github/v42/github"
 	"github.com/joho/godotenv"
 	"golang.org/x/oauth2"

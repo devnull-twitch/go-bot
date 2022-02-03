@@ -3,7 +3,7 @@ package commands
 import (
 	"io/ioutil"
 
-	"github.com/devnull-twitch/go-bot/pkg/tmi"
+	"github.com/devnull-twitch/go-tmi"
 	"gopkg.in/yaml.v2"
 )
 
