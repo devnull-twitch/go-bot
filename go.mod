@@ -1,4 +1,4 @@
-module github.com/devnull-twitch/go-tmi
+module github.com/devnull-twitch/go-bot
 
 go 1.17
 

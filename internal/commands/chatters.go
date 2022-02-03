@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 
-	"github.com/devnull-twitch/go-tmi/pkg/tmi"
+	"github.com/devnull-twitch/go-bot/pkg/tmi"
 )
 
 func RandChatter() tmi.Command {
